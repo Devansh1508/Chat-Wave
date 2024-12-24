@@ -59,4 +59,64 @@ export const loginUser = async (req, res) => {
   };
 
   
-  
+export const getUserProfile=async (req,res)=>{
+  try{
+    const {email,userId}=req.body;
+    const user=(email)?await User.findOne({email:email}):await User.findById(userId);
+
+    if(!user)res.status(404).json({ message: 'User does not exist' });
+
+    res.json({
+      name: user.name,
+      email: user.email,
+      profilePicture: user.profilePicture,
+      status: user.status,
+    })
+
+  }catch(error){
+    res.status(500).json({ message: 'Server error', error });
+  }
+}
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const { userId, name, profilePicture, email } = req.body;
+    const user = await User.findById({ userId });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User does not exist' });
+    }
+
+    // saving the user details if they are provided in the request 
+    user.name = name || user.name;
+    user.profilePicture = profilePicture || user.profilePicture;
+    user.email = email || user.email;
+
+    // will return the new updated user 
+    const updatedUser = await User.findByIdAndUpdate(userId, user, { new: true });
+
+    res.json({
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profilePicture: updatedUser.profilePicture,
+      status: updatedUser.status,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
+export const getUserStatus = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User does not exist' });
+    }
+
+    res.json({ status: user.status });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
