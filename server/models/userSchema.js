@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
   profilePicture: { type: String, default: '' }, // URL to profile picture
   status: { type: String, enum: ['online', 'offline'], default: 'offline' },
   createdAt: { type: Date, default: Date.now },
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
 });
 
 const userModel= mongoose.model('User', UserSchema);

@@ -3,6 +3,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoute from './routes/user.js';
+import messagesRoute from './routes/message.js';
 import connectDB from './config/database.js';
 import { Server } from 'socket.io';
 import setUpSocket from './sockets/socket.js'; // Import the socket setup function
@@ -26,6 +27,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/users', userRoute);
+app.use('/api/messages', messagesRoute);
 
 // Socket.IO setup
 setUpSocket(io);
