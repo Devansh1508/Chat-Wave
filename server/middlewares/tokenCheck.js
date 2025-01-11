@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
 
 const protect = async (req, res, next) => {
-  let token;
-
   if (
     req.headers.authorization &&
     // token should start with bearer 
@@ -11,7 +9,10 @@ const protect = async (req, res, next) => {
   ) {
     try {
       // Extract token
-      token = req.headers.authorization.split(' ')[1];
+      const token = req.headers.authorization.split(' ')[1];
+      if (!token) {
+        res.status(401).json({ message: 'Not authorized, token is not present' });
+      }
 
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -24,9 +25,6 @@ const protect = async (req, res, next) => {
     }
   }
 
-  if (!token) {
-    res.status(401).json({ message: 'Not authorized, token is not present' });
-  }
 };
 
 export default protect;
