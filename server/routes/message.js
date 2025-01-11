@@ -1,6 +1,6 @@
 import express from 'express';
-import { getMessages, sendMessageGroup, sendMessagePrivately, getGroupMessages } from "../controllers/message";
-import protect from '../middlewares/tokenCheck';
+import { getMessages, sendMessageGroup, sendMessagePrivately, getGroupMessages } from "../controllers/message.js";
+import protect from '../middlewares/tokenCheck.js';
 
 const router=express.Router();
 
