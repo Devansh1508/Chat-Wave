@@ -7,14 +7,14 @@ export const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const userExists = await User.findOne({ email });
-
+        
         if (userExists) {
           return res.status(400).json({ message: 'User already exists' });
         }
-
+        
         // 10 is the salt round for hashing
         const hashedPassword = await bcrypt.hash(password, 10);
-
+        
         const user = await User.create({
           name,
           email,
@@ -61,9 +61,8 @@ export const loginUser = async (req, res) => {
   
 export const getUserProfile=async (req,res)=>{
   try{
-    const {email,userId}=req.body;
-    const user=(email)?await User.findOne({email:email}):await User.findById(userId);
-
+    const {email}=req.body;
+    const user=await User.findOne({email:email})
     if(!user)res.status(404).json({ message: 'User does not exist' });
 
     res.json({
@@ -80,13 +79,20 @@ export const getUserProfile=async (req,res)=>{
 
 export const updateUserProfile = async (req, res) => {
   try {
-    const { userId, name, profilePicture, email } = req.body;
-    const user = await User.findById({ userId });
+    const { name, profilePicture, email } = req.body;
+    const { userId } = req.params;
+    console.log("hello");
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: 'User does not exist' });
     }
-
+    if(email){
+      const userExists = await User.findOne({email:email});
+      if (userExists && userExists._id.toString() !== userId) {
+        return res.status(400).json({ message: 'User already exists with the same email' });
+      }
+    }
     // saving the user details if they are provided in the request 
     user.name = name || user.name;
     user.profilePicture = profilePicture || user.profilePicture;

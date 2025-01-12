@@ -7,6 +7,6 @@ router.post('/registerUser',registerUser);
 router.post('/loginUser',loginUser);
 router.get('/getUserProfile',protect, getUserProfile);
 router.get('/getUserStatus/:userId',protect, getUserStatus);
-router.put('/updateUserProfile',protect, updateUserProfile);
+router.put('/updateUserProfile/:userId',protect, updateUserProfile);
         
 export default router;

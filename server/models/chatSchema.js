@@ -7,9 +7,9 @@ const ChatSchema = new mongoose.Schema({
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
 });
 
-
+// group chat id is mapped in groupschema
 const groupChatSchema=new mongoose.Schema({
-    groupId: { type: mongoose.Schema.Types.ObjectId, ref: "Group", required: true },
+    // groupId: { type: mongoose.Schema.Types.ObjectId, ref: "Group", required: true },
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     timestamp: { type: Date, default: Date.now },
 })
