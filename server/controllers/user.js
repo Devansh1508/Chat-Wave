@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import generateToken from '../util/token.js';
 import User from '../models/userSchema.js';
+import FriendRequest from '../models/friendRequestSchema.js';
 
 // Register a new User
 export const registerUser = async (req, res) => {
@@ -126,3 +127,24 @@ export const getUserStatus = async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 };
+
+export const sendRequest=async(req,res)=>{
+  try{
+    const {senderId, recipientId}=req.body;
+    const senderExist=await User.findById(senderId);
+    const recipientExist=await User.findById(recipientId);
+    if(!senderExist || !recipientExist){
+      return res.status(404).json({message:"User does not exist"});
+    }
+
+    const requestExist=await FriendRequest.findOne({senderId,recipientId});
+    if(requestExist){
+      return res.status(400).json({message:"Request already sent"});
+    }
+
+    const request=await FriendRequest.create({senderId,recipientId});
+    res.status(201).json(request);
+  }catch(err){
+    res.status(500).json({ message: 'error occured while sending the request', err });
+  }
+}
