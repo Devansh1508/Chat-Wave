@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "name": "Jenny Soldado",
+    "phone": "+6281-2345-6789",
+    "lastMessage": "Awesome! Can't wait. It's gonna be...",
+    "profileImage": "https://via.placeholder.com/150",
+    "messages": [
+      { "id": 1, "text": "Hey, have you thought about where we should go for the trip?", "sentByUser": true },
+      { "id": 2, "text": "Yeah, I was thinking maybe the mountains? We could do some hiking", "sentByUser": false }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Adam Jacobson",
+    "phone": "+6281-5678-1234",
+    "lastMessage": "I'm catching up on a new Netflix series...",
+    "profileImage": "https://via.placeholder.com/150",
+    "messages": []
+  }
+]
