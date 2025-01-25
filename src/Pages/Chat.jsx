@@ -1,50 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:5000'); // Backend server URL
+import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+import "./Chat.css"; // Include the styles in this file
 
 const Chat = () => {
-  const [message, setMessage] = useState('');
+  const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const socket = io("http://localhost:4000"); // Backend server URL
 
-  // Listen for 'chat message' events and update the messages state
   useEffect(() => {
-    socket.on('chat message', (msg) => {
+    // Listen for incoming messages from the server
+    socket.on("chat message", (msg) => {
       setMessages((prevMessages) => [...prevMessages, msg]);
     });
-    
-    return () => {
-      socket.off('chat message'); // Clean up when component unmounts
-    };
-  }, []);
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    console.log("working");
-    if (message.trim()) {
-      socket.emit('chat message', message); // Emit message to the server
-      setMessage(''); // Clear input field after sending
-    }
+    // Cleanup the socket connection on component unmount
+    return () => {
+      socket.off("chat message");
+    };
+  }, [socket]);
+
+  const sendMessage = () => {
+    socket.emit("chat message", input);
+    setInput("");
   };
 
   return (
     <div>
-      <h2>React Chat App</h2>
-      <ul>
+      <h1>Chat</h1>
+      <div>
         {messages.map((msg, index) => (
-          <li key={index}>{msg}</li>
+          <div key={index}>{msg}</div>
         ))}
-      </ul>
-      <form onSubmit={handleSendMessage}>
-        <input
-          type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Type your message"
-        />
-        <button type="submit">Send</button>
-        {messages}
-      </form>
+      </div>
+      <input
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={sendMessage}>Send</button>
     </div>
   );
 };
